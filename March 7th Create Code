@@ -1,0 +1,202 @@
+ 
+ 
+ // Motor 0 is the Arm and Motor 3 is the Spinner
+void CameraWarmUp ();
+void PrepForRead (); //Tank's code for driving to face ores
+void OreRead ();
+void LineUpSpinners ();
+void SpinnyR ();
+void SpinnyL ();
+
+int OreArea = 200;
+int RedLeft = 0;
+int RedRight = 0;
+int Done = 0;
+int main()
+{
+    wait_for_light(0);
+    shut_down_in(110);
+   // CameraWarmUp (); //activies camera
+  //  printf("Done Warming Up.\n");
+    create_connect ();
+    PrepForRead ();
+    create_drive_direct(0,0);
+    msleep(300);
+   // OreRead ();
+   // create_drive_direct(0,0);
+    LineUpSpinners ();
+
+    camera_close();
+    ao();
+    create_disconnect();
+    return 0;
+}
+void CameraWarmUp ()  //Just to make sure she's ready to work
+{
+    int Time = 0;
+    printf("Warming Up...\n");
+    while (Time < 50)
+    {
+        camera_open();
+        msleep(10);
+        camera_close();
+        msleep(10);
+        Time += 1;
+    }
+    camera_open();
+    msleep(100);
+}
+void PrepForRead ()  //Tank's
+{
+      /* cmpc(0);
+    while(gmpc(0) < 600) //lift Arm
+    {
+    motor(0,30);
+    }*/
+   
+   /* motor(0, 20);
+    msleep(200);*/
+    //create_drive_direct(0,0);
+    //msleep(2000);
+    //create_drive_direct(0,0);
+    //msleep(2000);
+    //create_drive_direct(0,0);
+    //msleep(2000);
+    create_drive_direct(0,0);
+    msleep(1000);
+    create_drive_direct(-500,-500);// Move backward at -500 mm/sec.
+    msleep(1000);// go one and a half second
+    create_drive_direct(125,-250);// create will turn right.
+    msleep(900);// go one second
+    create_drive_direct(250,250);// Move forward at 50 mm/sec.
+    msleep(2510);// go one second
+    create_drive_direct(-220,220);// create will turn left.
+    msleep(740);// go one second
+    create_drive_direct(100,100);
+    msleep(500);
+    create_drive_direct(-55,-55);// back up
+    msleep(550);
+    create_drive_direct(-25,25);//turn left afer back up
+    msleep(275);
+}
+void OreRead ()
+{
+cmpc(0);
+    while(gmpc(0) < 2350) //lift Arm
+    {
+    motor(0,30);
+    }
+   
+    camera_open();
+    while(Done <= 1)
+    {
+    camera_update();
+        msleep(10);
+        while((get_object_count(0) > 0) && (get_object_area(0,0) >= OreArea))  //Find where red ore is
+        {
+          camera_update();
+            if(get_object_center_x(0,0) < 79)
+            {
+            RedLeft += 1;
+                printf("Red is left: %d\n", RedLeft);
+                Done += 1;
+                break;
+            }
+            else
+            {
+                RedRight += 1;
+                printf("Red is Right: %d\n", RedRight);
+                Done += 1;
+                break;
+            }
+        }
+    }
+}
+
+void LineUpSpinners () //Lines up and Spin Spinners
+{
+    create_drive_direct(100,100);// go forward     This Section is for the scooting of the ores
+    msleep(1675);
+    create_drive_direct(150,150);// Move forward at 100 mm/sec
+    msleep(250);// go one second
+    create_drive_direct(-150,250);// turn left
+    msleep(250);
+    create_drive_direct(250,-200);// turn right
+    msleep(250);
+    create_drive_direct(100,100);//forward
+    msleep(500);
+    create_drive_direct(-150,250);//turn left
+    msleep(250);
+    create_drive_direct(250,-200);//forward right
+    msleep(250);
+     create_drive_direct(100,100);
+    msleep(1000);
+    create_drive_direct(-150,250);//turn left
+    msleep(250);
+    create_drive_direct(250,-200);//turn right
+    msleep(250);
+    create_drive_direct(-150,250);// turn right
+    msleep(250);
+    create_drive_direct(-200,-200);//back up  This section is for lining up with spinners
+    msleep(1000);
+    create_drive_direct(100,-150);
+    msleep(1000);
+    create_drive_direct(100,-150);
+    msleep(1000);
+     create_drive_direct(-50,-50);
+    msleep(1000);
+    create_drive_direct(-50,-50);
+    msleep(1000);
+    create_drive_direct(-50,-50);
+    msleep(1000);
+    create_drive_direct(-50,-50);
+    msleep(1000);
+    SpinnyL ();  //turns the spinner to the correct position
+//Spinny functions will be implemented in here
+}
+
+void SpinnyR () //Spins PVC to correct color green
+{
+cmpc(3);
+    while(gmpc(3) <= 545)  //march 7th edit
+{
+motor(3,35);
+}
+/*if (RedRight >= 1) //If the red is right, Moves spinner to correct position
+{
+while(gmpc(3) <= -769)
+{
+motor(3,-35);
+}
+}
+else  //If green right, Moves spinner to correct position
+{
+while(gmpc(3) <= 545)
+{
+motor(3,35);
+}
+}*/
+}
+
+void SpinnyL () //Spins PVC to correct color red
+{
+cmpc(3);
+    while(gmpc(3) >= -769)  //march 7th edit red
+{
+motor(3,-35);
+}
+/*if (RedLeft >= 1)  //If red is left, Moves spinner to correct position
+{
+while(gmpc(3) <= -769)
+{
+motor(3,-35);
+}
+}
+else //If green is to left, moves spinner to correct position
+{
+while(gmpc(3) <= 545)
+{
+motor(3,35);
+}
+}*/
+}
