@@ -1,0 +1,260 @@
+#include <kipr/wombat.h>
+
+int arm = 0;
+int claw = 1;
+int x = 500;
+int y = 1900;
+int up = 1850;
+int down = 500;
+int open = 1200;
+int close = 150;
+
+void armup();
+void armdown();
+void clawclose();
+void clawopen();
+
+
+int main()
+{
+    wait_for_light(1);
+    shut_down_in(112);
+    
+    enable_servos();
+    
+    set_servo_position(1,1024);
+    set_servo_position(0,600); 
+    
+   
+    
+    motor(3,100);
+    motor(0,100);
+    msleep(2370);// go forward
+    
+    motor(0,70);
+    motor(3,0);
+    msleep(580);//turn
+    
+    set_servo_position(0,260);//stick in pvc
+    
+    motor(3,70);
+    motor(0,0);
+    msleep(1620);//turn
+    
+    motor(0,54);
+    motor(3,54);
+    msleep(693);//push in corner
+    
+    set_servo_position(0,580);//lift up outa pvc
+    
+    motor(0,-100);
+    motor(3,-100);
+    msleep(1130);//back up 
+    
+    set_servo_position(0,900);//set for line follow
+    
+    motor(0,100);
+    motor(3,0);
+    msleep(2254);//spin 
+    
+    motor(0,95);
+    motor(3,100);
+    msleep(5200);//up bridge
+    
+  //  set_servo_position(0,350);
+    
+    //  while(gmpc(0) <= 1500)								//line follow
+   // {
+    	
+    //if(analog(0) < 3500)
+    //{
+      //  motor(0, 25);
+        //motor(3, 55);
+       // printf("Brown Value: %d\n",analog(0));
+    //}
+    //else
+    //{
+     //   motor(0,55);
+       // motor(3,25);
+   // printf("Black Value: %d\n",analog(0));
+    //}
+    //	}
+    
+   // motor(0,0);
+    //motor(3,0);
+    //msleep(300);
+    
+    //motor(0,100);
+    //motor(3,100);
+    //msleep(1300);
+    
+    
+   // motor(0,100);
+    //motor(3,100);
+    //msleep(900);//up
+    
+   // motor(0,0);
+   // motor(3,0);
+   // msleep(500);//stop
+    
+   // set_servo_position(0,350);//set for follow 2
+    
+    //motor(0,0);
+    //motor(3,0);
+    //msleep(500);
+   
+   // while(digital(1) == 0)
+    //{
+    
+    //if(analog(0) <= 3000)
+    //{
+      //  motor(0, 25);
+        //motor(3, 55);
+    //}
+    //else
+    //{
+      //  motor(0,55);
+      //  motor(3,25);
+    //}
+    //	}
+    
+    motor(0,-70);
+    motor(3,-70);
+    msleep(280);//back up at bridge
+    
+   motor(0,80);
+    motor(3,-80);
+    msleep(880);//turn on top bridge
+    
+   motor(0,100);
+    motor(3,100);
+    msleep(500);
+    
+    //motor(0,0);
+    //motor(3,0);
+    //msleep(1000);
+    
+    //set_servo_position(0,220);
+   
+    //motor(0,0);
+    //motor(3,0);
+    //msleep(1000);//stop
+    
+    //cmpc(0);
+    //cmpc(3);
+    
+    
+    
+     //while(gmpc(0) <= 3000)								//line follow
+    //{
+    	
+   // if(analog(0) < 3500)
+   // {
+       // motor(0, 25);
+        //motor(3, 55);
+        //printf("Brown Value: %d\n",analog(0));
+   // }
+    //else
+    //{
+       // motor(0,55);
+       // motor(3,25);
+    //printf("Black Value: %d\n",analog(0));
+   // }
+    	//}
+    
+   // motor(0,0);
+   // motor(3,0);			//pause
+    //msleep(400);
+    
+    //armup();		//armup
+    
+     //motor(0,0);
+    //motor(3,0);		//pause
+    //msleep(400);
+    
+    //clawopen();		//clawopen
+    
+     //motor(0,0);
+    //motor(3,0);		//pause
+    //msleep(400);
+    
+   // motor(0,50);
+   // //motor(3,50);		//forward
+   // msleep(3400);
+    
+     motor(0,0);
+    motor(3,0);		//pause
+    msleep(400);
+    
+    //clawclose();		//claw close
+    
+     motor(0,0);
+    motor(3,0);		//pause
+    msleep(400);
+    
+    //set_servo_position(arm, 2047);		//claw raise botguy
+    
+     motor(0,0);
+    motor(3,0);		//pause
+    msleep(400);
+    
+    //motor(0,-100);
+    //motor(3,-100);		//backward
+    //msleep(1200);
+    
+    //motor(3, -50);
+    //motor(0, 100);		//turn
+    //msleep(200);
+    
+    //clawopen();		//clawopen
+    
+    
+    
+ 
+    
+    
+    
+    disable_servos();
+    return 0;
+}
+
+
+void armup()
+{
+    while(get_servo_position(arm) < up)
+    {
+        set_servo_position(arm, x);
+        x += 5;
+        msleep(10);
+    }
+}
+
+void armdown()
+{
+    while(get_servo_position(arm) > down)
+    {
+        set_servo_position(arm, x);
+        x -= 5;
+        msleep(10);
+    }
+}
+
+void clawopen()
+{
+    while(get_servo_position(claw) < open)
+    {
+        set_servo_position(claw, y);
+        y += 2;
+        msleep(5);
+    }
+}
+
+void clawclose()
+{
+    while(get_servo_position(claw) > close)
+    {
+        set_servo_position(claw, y);
+        y -= 2;
+        msleep(10);
+    }
+}
